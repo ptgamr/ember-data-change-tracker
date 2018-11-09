@@ -13,7 +13,7 @@ export const relationShipTransform = {
       let relationship = model.belongsTo(key).belongsToRelationship;
 
       if (relationship.isAsync) {
-        return model.get(`${key}.id`);
+        return model.belongsTo(`${key}`).id();
       } else {
         let value = relationship.hasOwnProperty('inverseInternalModel') ? relationship.inverseInternalModel : relationship.inverseRecord;
         return value && modelTransform(value, options.polymorphic);
