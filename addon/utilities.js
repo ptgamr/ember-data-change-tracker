@@ -11,8 +11,13 @@ export const relationShipTransform = {
   belongsTo: {
     serialize(model, key, options) {
       let relationship = model.belongsTo(key).belongsToRelationship;
-      let value = relationship.hasOwnProperty('inverseInternalModel') ? relationship.inverseInternalModel : relationship.inverseRecord;
-      return value && modelTransform(value, options.polymorphic);
+
+      if (relationship.isAsync) {
+        return model.get(`${key}.id`);
+      } else {
+        let value = relationship.hasOwnProperty('inverseInternalModel') ? relationship.inverseInternalModel : relationship.inverseRecord;
+        return value && modelTransform(value, options.polymorphic);
+      }
     },
 
     deserialize() {
